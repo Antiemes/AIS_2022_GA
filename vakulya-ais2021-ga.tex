@@ -30,7 +30,7 @@ In this paper
 \end{abstract}
 
 \begin{IEEEkeywords}
-shutter time, exposure time, camera communication, equivalent sampling
+genetic algorithm, image approximation
 \end{IEEEkeywords}
 
 \section{Introduction}
@@ -56,6 +56,42 @@ optimized with GA. The chromosome representation, the
 mutation nad crossover operators and different selection
 strategies are evaluated. The algorithm is capable to give
 recognizable approximation of images in the 150 byte range.
+
+\section{Implementation}
+
+\subsection{Software architecture}
+
+The image approximation algorithm is implemented in C,
+without using external libraries (besides glibc). This
+approach makes the code easily portable, but on the other
+hand it makes handling of different image formats more
+difficult. Thus, only loading and saving of BMP files
+with predefined resolution and color depth are supported.
+
+\subsection{Chromosome representation}
+
+\subsection{Genetic operators}
+
+
+\section{Test results}
+
+\subsection{Test images}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.35\textwidth]{fig/sherlock-orig.png}
+	\caption{The selected test image}
+	\label{sherlock-orig}
+\end{figure}
+
+\begin{figure}[htbp]
+	\centering
+		\resizebox{.45\textwidth}{!}{\input{fig.tex}}
+	\caption{TODO}
+	\label{foo}
+\end{figure}
+
+
 \section{Summary}
 
 
