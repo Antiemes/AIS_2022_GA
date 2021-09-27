@@ -35,7 +35,7 @@ genetic algorithm, image approximation
 
 \section{Introduction}
 
-Genetic algirithms (GA) \cite{b1} offer good approximations to many
+Genetic algirithms (GA) \cite{ga-book} offer good approximations to many
 problems, where no fast algorithm is known to calculate
 the optimal solutions. It models the natural selection,
 where each member of a population (called specimen)
@@ -55,7 +55,30 @@ a monochromatic image; the position of the triangles are
 optimized with GA. The chromosome representation, the
 mutation nad crossover operators and different selection
 strategies are evaluated. The algorithm is capable to give
-recognizable approximation of images in the 150 byte range.
+recognizable approximation of images in the 100 byte range.
+
+\section{Previous work}
+
+Genetic algorithms are suitable to give solutions to
+problems, where 
+
+Scheduling is an everyday problem in industy and transportation
+planning, where genetic algorithms can offer a good alternative
+to e.g. linear programming \cite{ga-transport}.
+
+A good application of genetic algorithm is calculating
+the synaptic weights of neural networks. MarIO \cite{mar-io}
+is an AI player to the Super Mario game.
+
+Genetic algorithms are also suitable to generate program code
+(genetic programming) to determine the behavior of e.g.
+autonomous robots. A good example is \cite{ga-robocode},
+where a specialla tailored programming language (Robocode)
+is used to program virtual battle robots.
+
+In economics portfolio optimization \cite{ga-portfolio}
+and automatic trading \cite{ga-trading}
+can be implemented with genetic algorithms.
 
 \section{Implementation}
 
@@ -79,22 +102,22 @@ with predefined resolution and color depth are supported.
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.35\textwidth]{fig/sherlock-orig.png}
-	\caption{The selected test image}
-	\label{sherlock-orig}
+	\includegraphics[width=0.35\textwidth]{fig/originals.png}
+	\caption{The selected test images. (a) Silhouette of Sherlock Holmes, (b) Silhouette of a cat.}
+	\label{fig-orig}
 \end{figure}
 
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.35\textwidth]{fig/sherlock6.png}
-	\caption{The selected test image}
+	\caption{The best matching Sherlock image after $g$ generations.}
 	\label{sherlock-6}
 \end{figure}
 
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.35\textwidth]{fig/cat6.png}
-	\caption{The selected test image}
+	\caption{The best matching cat image after $g$ generations.}
 	\label{cat-6}
 \end{figure}
 
@@ -102,7 +125,7 @@ with predefined resolution and color depth are supported.
 \begin{figure}[htbp]
 	\centering
 		\resizebox{.45\textwidth}{!}{\input{fig.tex}}
-	\caption{20 polygons}
+	\caption{The } %20 polygons
 	\label{foo}
 \end{figure}
 
@@ -119,13 +142,26 @@ with predefined resolution and color depth are supported.
 
 \begin{thebibliography}{00}
 
-\bibitem{b1}Sivanandam, S. N. and Deepa, S. N., ``Introduction to Genetic Algorithms'',
+\bibitem{ga-book}Sivanandam, S. N. and Deepa, S. N., ``Introduction to Genetic Algorithms'',
 	Springer-Verlag Berlin Heidelberg, 2008, ISBN 978-3-540-73189-4
 	
 
-\bibitem{b2}Baldominos A., Saez Y., Recio G., Calle J. ``Learning Levels of Mario AI Using Genetic Algorithms``,
+\bibitem{mar-io}Baldominos A., Saez Y., Recio G., Calle J. ``Learning Levels of Mario AI Using Genetic Algorithms``,
 	In: Advances in Artificial Intelligence. CAEPIA 2015. Lecture Notes in Computer Science, vol 9422. Springer, Cham. doi: 10.1007/978-3-319-24598-0\_24
 
+\bibitem{ga-transport}C. Lin, J. Yu, J. Liu and C. Lee, ``Genetic Algorithm for Shortest Driving Time in Intelligent Transportation Systems``, 2008 International Conference on Multimedia and Ubiquitous Engineering, 2008, pp. 402-406, doi: 10.1109/MUE.2008.16.
+
+\bibitem{ga-robocode}Shichel Y., Ziserman E., Sipper M., ``Using Genetic Programming to Evolve Robocode Players`` In: Genetic Programming. EuroGP 2005. Lecture Notes in Computer Science, vol 3447. Springer, Berlin, Heidelberg. https://doi.org/10.1007/978-3-540-31989-4\_13
+
+\bibitem{ga-portfolio}S. Slimane and M. Benbouziane, ``Portfolio Selection Using Genetic Algorithm`` In: Journal of Applied Finance \& Banking , Vol. 2, No. 4 (2012): pp. 143-154.
+
+\bibitem{ga-trading}R.J. Kuo, C.H. Chen, Y.C. Hwang, ``An intelligent stock trading decision support system through integration of genetic algorithm based fuzzy neural network and artificial neural network``,
+Fuzzy Sets and Systems,
+Volume 118, Issue 1,
+2001,
+Pages 21-45,
+ISSN 0165-0114,
+10.1016/S0165-0114(98)00399-6.
 
 %\bibitem{b2}ISO 516:2019. Camera shutters — Timing — General definition and
 %	mechanical shutter measurements. International Organization for Standardization,
