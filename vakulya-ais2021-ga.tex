@@ -120,13 +120,15 @@ between the corners:
 
 \subsection{Chromosome representation}
 
-The chromosome representation is a tripe $(k, T, C)$, where
+The chromosome representation of an approximation $Q$ is
+a set of triangles, represented by a triplet $(k, T, C)$, where
 
 \begin{itemize}
 
 	\item{$k \in Z$ is the number of triangles used in the approximation,}
 
-	\item{$T \in Z^{k \times 3 \times 2}$ is the set of triangles, given with 3 coordinate pairs,}
+	\item{$T \in Z^{k \times 3 \times 2}$ is the set of triangles,
+	given with 3 coordinate pairs,}
 
 	\item{$C \in {0,1}^k$ is the set of triangle colors.}
 
@@ -134,16 +136,56 @@ The chromosome representation is a tripe $(k, T, C)$, where
 
 \subsection{Fitness function}
 
-Instead of the fitness function, where the more suitable
-specimen have larger fitness, an $E$ error function is used, representing
-the mismatching area between the target image and the triangle
-based approximation.
+The image form $R$ of an approximation $(k, T, C)$ is defined as follows:
 
 \begin{equation}
-	E = \sum_{i,j} \left( \frac{IMG_{ij}-A_{ij}}{mn} \right), 1 \leq i \leq n, 1 \leq j \leq n
+	R_{i,j}(k, T, C)=
+	\begin{cases}
+		C_v,& \exists v: (i, j) \in I(T_v),\\
+		    & \nexists w: w>v, (i, j) \in I(T_v),\\
+				&1 \leq v, w \leq k\\
+		0,  & \text{otherwise}
+	\end{cases}
+\end{equation}
+
+Instead of the fitness function, where the more suitable
+specimen have larger fitness, an $E$ error function is used, representing
+the proportion of the mismatching area between the target image and the triangle
+based approximation, as a percentage.
+
+\begin{equation}
+	\begin{gathered}
+		E = \frac{\sum_{i,j} \left( \frac{IMG_{i,j}-R_{i,j}}{mn} \right)}{n^2}\cdot 100\\
+		1 \leq i,j \leq n
+	\end{gathered}
 \end{equation}
 
 \subsection{Genetic operators}
+
+The three genetic operators (mutation, crossover and selection)
+are implemented as follows. Three simple mutation types was
+built into the program.
+
+\begin{itemize}
+
+	\item{\emph{M1} removes a randomly selected triangle}
+
+	\item{\emph{M2} adds a triangle with random coordinates}
+
+	\item{\emph{M3} modifies the position of 1, 2 or 3 corneres of a triangle}
+
+\end{itemize}
+
+The crossover operator takes triangles from two selected triangle-set
+and takes triangles from both, randomly.
+
+During the selection the fitness function is calculated and a defined
+amount of the population is eliminated and overwritten by
+newly generated specimen (by crossover).
+
+\subsection{GA strategies}
+
+
 
 \subsection{Software architecture}
 
@@ -156,14 +198,38 @@ with predefined resolution and color depth are supported.
 
 \section{Test results}
 
-\subsection{Test images}
+To test the performance of the proposed image approximation
+method, two moderately complex test images was selected,
+as shown in Fig. \ref{fig-orig}. Both images have a
+resolution og $512 \times 512$ pixels.
 
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.35\textwidth]{fig/originals.png}
-	\caption{The selected test images. (a) Silhouette of Sherlock Holmes, (b) Silhouette of a cat.}
+	\caption{The selected test images.
+	(a) Silhouette of Sherlock Holmes,
+	(b) Silhouette of a cat.}
 	\label{fig-orig}
 \end{figure}
+
+The approximation algorithm was tested with the selected
+images with the following settings. The size of the population
+8000. In each generation each specimen is mutated with the
+\emph{M1}, \emph{M2} and \emph{M3} operators with 10\%, 50\%
+and 80\% probability, respectively. The 1800 worst specimen
+was overwritten with the crossover of randomly selected ones.
+Note that this is an elitist setup, which can lead to a fast
+convergence, at a risk of a less accurate final result.
+
+The polygon limit was set to $k_{max}=5$, 10, 15, 20, 30, 40, 50,
+60, 70 and 80. Each different setup was run through 1000 generations.
+
+Figures \ref{sherlock-6} and \ref{cat-6} show the image with
+the best fitness after 25, 50, 100, 200, 300 and 500 generations
+with $k_{max}=20$ polygons. As can be clearly seen, the
+accuracy of the approximation quickly increases first; both
+images are recognizable after 200 generations, but only slight
+improvements can be observed afterwards.
 
 \begin{figure}[htbp]
 	\centering
@@ -179,19 +245,28 @@ with predefined resolution and color depth are supported.
 	\label{cat-6}
 \end{figure}
 
+Figures \ref{curve-sherlock} and \ref{curve-cat} show the change
+of best observed fitness after each generation for the Sherlock
+and the cat images. Different colors mean different maximal
+triangle numbers. With extremely low polygon count the approximation
+remains very rough. Adding more than approx\. 30 triangles
+does not make any quantitative improvement, some extra detail
+was observed up to 60 triangles.
 
 \begin{figure}[htbp]
 	\centering
 		\resizebox{.45\textwidth}{!}{\input{fig.tex}}
-	\caption{The } %20 polygons
-	\label{foo}
+	\caption{Change of the fitness function during the approximation of the Sherlock image.
+	The smallest error after each generation is shown for different polygon limits.} %20 polygons
+	\label{curve-sherlock}
 \end{figure}
 
 \begin{figure}[htbp]
 	\centering
 		\resizebox{.45\textwidth}{!}{\input{fig_cat.tex}}
-	\caption{TODO}
-	\label{foo}
+	\caption{Change of the fitness function during the approximation of the cat image.
+	The smallest error after each generation is shown for different polygon limits.}
+	\label{curve-cat}
 \end{figure}
 
 
@@ -224,48 +299,6 @@ ISSN 0165-0114,
 
 \bibitem{image-proc}Jayaraman, S., S. Esakkirajan, and T. Veerakumar. ``Digital image processing``, Mc Graw Hill India, 2009, ISBN 978-0070144798
 
-%\bibitem{b2}ISO 516:2019. Camera shutters — Timing — General definition and
-%	mechanical shutter measurements. International Organization for Standardization,
-%	2019. Online: https://www.iso.org/obp/ui/\#iso:std:iso:516:ed-4:v1:en
-%
-%\bibitem{b3}Y. Asakura, et al., ``Exposure precision tester and exposure precision
-%	testing method for camera'', U.S. Patent 5 895 132, Apr. 20, 1999.
-%
-%\bibitem{b4}Peter D. Hiscocks, ``Measuring Camera Shutter Speed'',
-%	Royal Astronomical Society, Toronto Centre, Canada, 2010.
-%	Online: https://www.ee.ryerson.ca/~phiscock/astronomy/light-pollution/shutter-cal.pdf
-%
-%\bibitem{b5}V. N. Budilov, V. I. Volovach, M. V. Shakurskiy and S. V. Eliseeva,
-%``Automated measurement of digital video cameras exposure time'',
-%	East-West Design \& Test Symposium (EWDTS 2013), Rostov-on-Don,
-%	2013, pp. 1-4. doi: 10.1109/EWDTS.2013.6673136
-%
-%
-%\bibitem{b6}CCTVCAD Lab Toolkit. CCTVCAD Software. Perm, Russia, 2011.
-%Online: http://www.cctvcad.com/labtoolkit\_help
-%
-%\bibitem{b7}L. Masson, F. Cao, C. Viard, and F. Guichard,
-%	``Device and algorithms for camera timing evaluation''
-%	in Proc. IS\&T/SPIE Electronic Imaging Symposium,
-%	San Francisco, California, United States, 2014.
-%	doi:10.1117/12.2042161
-%
-%\bibitem{b8}Image Engineering: LED-Panel.
-%	Online: https://www.image-engineering.de/products/equipment/measurement-devices/900-led-panel
-%
-%\bibitem{b9}G. Shize, S. Shenghe and Z. Zhongting,
-%	``A novel equivalent sampling method using in the digital storage oscilloscopes''
-%	in Proc. 1994 IEEE Instrumentation and Measurement Technology Conference,
-%	Hamamatsu, Japan, 1994, pp. 530-532 vol.2.
-%	doi: 10.1109/IMTC.1994.351901
-%
-%\bibitem{b10}A. G. J. Holt, J. J. Hill and R. Linggard,
-%	``Integral sampling'',
-%	in Proceedings of the IEEE, vol. 61, no. 5, pp. 679-680, May 1973.
-%	doi: 10.1109/PROC.1973.9138
-%
-%\bibitem{b11}FLIR Machine Vision Cameras.
-%	Online: https://www.flir.com/browse/industrial/machine-vision-cameras/
 
 \end{thebibliography}
 
