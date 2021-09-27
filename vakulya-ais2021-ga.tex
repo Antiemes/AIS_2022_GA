@@ -59,12 +59,16 @@ recognizable approximation of images in the 100 byte range.
 
 \section{Previous work}
 
-Genetic algorithms are suitable to give solutions to
-problems, where 
+Genetic algorithms are suitable to problems, where
+there no efficient solution is available to calculate
+the optimal (or, in many cases, any) solution.
+An advantage of GA is the iterative operation, making it possible
+to stop the optimization process in any time and use the current
+best solution.
 
-Scheduling is an everyday problem in industy and transportation
-planning, where genetic algorithms can offer a good alternative
-to e.g. linear programming \cite{ga-transport}.
+Scheduling is an everyday problem in industy \cite{ga-scheduling}
+and transportation planning \cite{ga-transport}, where genetic
+algorithms can offer a good alternative to e.g. linear programming.
 
 A good application of genetic algorithm is calculating
 the synaptic weights of neural networks. MarIO \cite{mar-io}
@@ -80,7 +84,66 @@ In economics portfolio optimization \cite{ga-portfolio}
 and automatic trading \cite{ga-trading}
 can be implemented with genetic algorithms.
 
-\section{Implementation}
+\cite{image-proc}
+
+\section{The GA-based image compression}
+
+\subsection{Problem statement}
+
+An image $IMG$ is given as square ($n \times n$) matrix, where each pixel is
+either black or white:
+
+\begin{equation}
+	IMG = (a_{ij}) \in {0,1}^{n \times n}
+\end{equation}
+
+An approximation is given as a set of $n$ triangles. The corner points of
+the triangles are placed in the target image, in integer positions,
+and can have either black or white color. The $k^\text{th}$ triangle
+$t_k$ can be given as a quad:
+
+\begin{equation}
+	t_k = (A, B, C, c), A, B, C \in {1 \dots n}^2, c \in {0, 1}
+\end{equation}
+
+Time $I(t_k)$ image of triangle $t_k$ is a set of points, which are geometrically
+between the corners:
+
+\begin{equation}
+	\begin{split}
+	I(t_k) &= {a_{ij}},\\
+	\exists \alpha, \beta &\in [0, 1]:\\
+	i &= \beta(\alpha A_1 + (1-\alpha)B_1)+(1-\beta)C_1\\
+	j &= \beta(\alpha A_2 + (1-\alpha)B_2)+(1-\beta)C_2
+	\end{split}
+\end{equation}
+
+\subsection{Chromosome representation}
+
+The chromosome representation is a tripe $(k, T, C)$, where
+
+\begin{itemize}
+
+	\item{$k \in Z$ is the number of triangles used in the approximation,}
+
+	\item{$T \in Z^{k \times 3 \times 2}$ is the set of triangles, given with 3 coordinate pairs,}
+
+	\item{$C \in {0,1}^k$ is the set of triangle colors.}
+
+\end{itemize}
+
+\subsection{Fitness function}
+
+Instead of the fitness function, where the more suitable
+specimen have larger fitness, an $E$ error function is used, representing
+the mismatching area between the target image and the triangle
+based approximation.
+
+\begin{equation}
+	E = \sum_{i,j} \left( \frac{IMG_{ij}-A_{ij}}{mn} \right), 1 \leq i \leq n, 1 \leq j \leq n
+\end{equation}
+
+\subsection{Genetic operators}
 
 \subsection{Software architecture}
 
@@ -90,11 +153,6 @@ approach makes the code easily portable, but on the other
 hand it makes handling of different image formats more
 difficult. Thus, only loading and saving of BMP files
 with predefined resolution and color depth are supported.
-
-\subsection{Chromosome representation}
-
-\subsection{Genetic operators}
-
 
 \section{Test results}
 
@@ -144,12 +202,13 @@ with predefined resolution and color depth are supported.
 
 \bibitem{ga-book}Sivanandam, S. N. and Deepa, S. N., ``Introduction to Genetic Algorithms'',
 	Springer-Verlag Berlin Heidelberg, 2008, ISBN 978-3-540-73189-4
-	
 
 \bibitem{mar-io}Baldominos A., Saez Y., Recio G., Calle J. ``Learning Levels of Mario AI Using Genetic Algorithms``,
 	In: Advances in Artificial Intelligence. CAEPIA 2015. Lecture Notes in Computer Science, vol 9422. Springer, Cham. doi: 10.1007/978-3-319-24598-0\_24
 
 \bibitem{ga-transport}C. Lin, J. Yu, J. Liu and C. Lee, ``Genetic Algorithm for Shortest Driving Time in Intelligent Transportation Systems``, 2008 International Conference on Multimedia and Ubiquitous Engineering, 2008, pp. 402-406, doi: 10.1109/MUE.2008.16.
+
+\bibitem{ga-scheduling}Lim, C., and Eoksu S., ``Production planning in manufacturing/remanufacturing environment using genetic algorithm``, Proceedings of the 7th annual conference on Genetic and evolutionary computation. 2005.
 
 \bibitem{ga-robocode}Shichel Y., Ziserman E., Sipper M., ``Using Genetic Programming to Evolve Robocode Players`` In: Genetic Programming. EuroGP 2005. Lecture Notes in Computer Science, vol 3447. Springer, Berlin, Heidelberg. https://doi.org/10.1007/978-3-540-31989-4\_13
 
@@ -162,6 +221,8 @@ Volume 118, Issue 1,
 Pages 21-45,
 ISSN 0165-0114,
 10.1016/S0165-0114(98)00399-6.
+
+\bibitem{image-proc}Jayaraman, S., S. Esakkirajan, and T. Veerakumar. ``Digital image processing``, Mc Graw Hill India, 2009, ISBN 978-0070144798
 
 %\bibitem{b2}ISO 516:2019. Camera shutters — Timing — General definition and
 %	mechanical shutter measurements. International Organization for Standardization,
