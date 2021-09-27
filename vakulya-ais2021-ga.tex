@@ -183,7 +183,7 @@ During the selection the fitness function is calculated and a defined
 amount of the population is eliminated and overwritten by
 newly generated specimen (by crossover).
 
-\subsection{GA strategies}
+\subsection{Program flow}
 
 
 
@@ -195,6 +195,27 @@ approach makes the code easily portable, but on the other
 hand it makes handling of different image formats more
 difficult. Thus, only loading and saving of BMP files
 with predefined resolution and color depth are supported.
+
+The test program prints a short information line after
+each generation, which contains the generation number,
+the error of the best matching approximation and the
+current number of polygons. The best matching image is
+saved after each generation, to give more visual feedback.
+
+With the actual settings each approximated image takes
+
+\begin{itemize}
+
+\item{8 bits to store the number of polygons,}
+
+\item{$3 \times 2 \times 9 \times k$ bits to store the triangle
+coordinates,}
+
+\item{and $k$ bits to store the colors of the triangles,}
+
+\end{itemize}
+
+sum up to $1+\frac{55}{8}k$ bytes.
 
 \section{Test results}
 
@@ -251,7 +272,8 @@ and the cat images. Different colors mean different maximal
 triangle numbers. With extremely low polygon count the approximation
 remains very rough. Adding more than approx\. 30 triangles
 does not make any quantitative improvement, some extra detail
-was observed up to 60 triangles.
+was observed up to 60 triangles. A recognizable image approximated
+with 20 triangles takes 139 bytes of data.
 
 \begin{figure}[htbp]
 	\centering
@@ -272,6 +294,8 @@ was observed up to 60 triangles.
 
 \section{Summary}
 
+A genetic algorithm based image approximation method
+was proposed.
 
 \begin{thebibliography}{00}
 
