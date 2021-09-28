@@ -30,7 +30,7 @@ In this paper a genetic algorithm (GA) based image approximation
 algorithm is presented for black and white images. The approximation
 uses a limited amount of triangles, where the GA is used to
 optimize their shape and position. The formal definitions,
-implementation details and test results are prided. The
+implementation details and test results are provided. The
 algorithm can produce recognizable approximations in less
 than 139 bytes.
 \end{abstract}
@@ -41,7 +41,8 @@ genetic algorithm, image approximation
 
 \section{Introduction}
 
-Genetic algirithms (GA) \cite{ga-book} offer good approximations to many
+Genetic algirithms (GA) \cite{ga-book} offer good
+approximations to various
 problems, where no fast algorithm is known to calculate
 the optimal solutions. It models the natural selection,
 where each member of a population (called specimen)
@@ -59,7 +60,7 @@ In this paper a GA-based lossy image compression method is
 presented. A number of triangles are used to approximate
 a monochromatic image; the position of the triangles are
 optimized with GA. The chromosome representation, the
-mutation nad crossover operators and different selection
+mutation and crossover operators and different selection
 strategies are evaluated. The algorithm is capable to give
 recognizable approximation of images in the 100 byte range,
 which means an extreme compression in exchange for the
@@ -68,7 +69,7 @@ lower quality output.
 \section{Related work}
 
 Genetic algorithms are suitable to problems, where
-there no efficient solution is available to calculate
+there is no efficient solution available to calculate
 the optimal (or, in many cases, any) solution.
 An advantage of GA is the iterative operation, making it possible
 to stop the optimization process in any time and use the current
@@ -262,7 +263,7 @@ sum up to $1+\frac{55}{8}k$ bytes.
 To test the performance of the proposed image approximation
 method, two moderately complex test images was selected,
 as shown in Fig. \ref{fig-orig}. Both images have a
-resolution og $512 \times 512$ pixels.
+resolution of $512 \times 512$ pixels.
 
 \begin{figure}[htbp]
 	\centering
@@ -275,7 +276,7 @@ resolution og $512 \times 512$ pixels.
 
 The approximation algorithm was tested with the selected
 images with the following settings. The size of the population
-8000. In each generation each specimen is mutated with the
+is 2048. In each generation each specimen is mutated with the
 \emph{M1}, \emph{M2} and \emph{M3} operators with 10\%, 50\%
 and 80\% probability, respectively. The 1800 worst specimen
 was overwritten with the crossover of randomly selected ones.
@@ -417,19 +418,18 @@ GA ($k_{max}=50$)   &  345     & 345  \\
 A genetic algorithm based image approximation method
 was proposed. The algorithm can approximate black and
 white images with a limited (definable) number of
-bkack and white triangles. The GA is implemented
+black and white triangles. The GA is implemented
 with 3 mutation and a crossover operator. Selection
 operator uses an elitist approach. Formal definition
 was given to the fitness function computation.
 
 The proposed algorithm was implemented as a C
 language program and tested with different input
-images and with several maximal number number
-of triangles.
+images and with several maximal number of triangles.
 
 The algorithm can generate a recognizable quality
-approximation of an image with moderate complexity
-in less than 150 bytes with computation times
+approximation of images with moderate complexity
+in less than 150 bytes with computation time
 under 10 miutes.
 
 \begin{thebibliography}{00}
