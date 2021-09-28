@@ -26,7 +26,13 @@
 \maketitle
 
 \begin{abstract}
-In this paper
+In this paper a genetic algorithm (GA) based image approximation
+algorithm is presented for black and white images. The approximation
+uses a limited amount of triangles, where the GA is used to
+optimize their shape and position. The formal definitions,
+implementation details and test results are prided. The
+algorithm can produce recognizable approximations in less
+than 139 bytes.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -308,36 +314,80 @@ with 20 triangles takes 139 bytes of data.
 \caption{The error after 1000 generations with different $k_{max}$ values}
 \begin{center}
 %\begin{booktabs}{colspec={ccccccc},row{even}={blue9}}
-\begin{booktabs}{colspec={ccc}}
+\begin{booktabs}{colspec={cccc}}
 \toprule
 {Image name} &
 	{$k_{max}$} &
-	Final error (\%) \\
+	Final error (\%) &
+	Size (bytes)\\
 \midrule
-\SetCell[r=10]{c,1.5cm}{Sherlock} &   5 & 6.338 \\
-                                  &  10 & 4.218 \\
-                                  &  15 & 2.401 \\
-                                  &  20 & 1.439 \\
-                                  &  25 & 1.220 \\
-                                  &  30 & 1.301 \\
-                                  &  40 & 1.123 \\
-                                  &  50 & 1.006 \\
-                                  &  60 & 0.940 \\
-                                  &  70 & 0.898 \\
+\SetCell[r=10]{c,1.5cm}{Sherlock} &   5 & 6.338 &  36\\
+                                  &  10 & 4.218 &  70\\
+                                  &  15 & 2.401 & 105\\
+                                  &  20 & 1.439 & 139\\
+                                  &  25 & 1.220 & 173\\
+                                  &  30 & 1.301 & 207\\
+                                  &  40 & 1.123 & 276\\
+                                  &  50 & 1.006 & 345\\
+                                  &  60 & 0.940 & 414\\
+                                  &  70 & 0.898 & 483\\
 \specialrule{2.5pt,gray5}{1pt}{1pt}
-\SetCell[r=10]{c,1.5cm}{Cat}      &   5 & 3.775 \\
-                                  &  10 & 2.260 \\
-                                  &  15 & 1.320 \\
-                                  &  20 & 1.199 \\
-                                  &  25 & 0.837 \\
-                                  &  30 & 0.807 \\
-                                  &  40 & 0.532 \\
-                                  &  50 & 0.612 \\
-                                  &  60 & 0.569 \\
-                                  &  70 & 0.562 \\
+\SetCell[r=10]{c,1.5cm}{Cat}      &   5 & 3.775 &  36\\
+                                  &  10 & 2.260 &  70\\
+                                  &  15 & 1.320 & 105\\
+                                  &  20 & 1.199 & 139\\
+                                  &  25 & 0.837 & 173\\
+                                  &  30 & 0.807 & 207\\
+                                  &  40 & 0.532 & 276\\
+                                  &  50 & 0.612 & 345\\
+                                  &  60 & 0.569 & 414\\
+                                  &  70 & 0.562 & 483\\
 \bottomrule
 \end{booktabs}
 \label{tab1}
+\end{center}
+\end{table}
+
+\section{Comparison to compression algorithms}
+
+Images can be compressed with (lossless and lossy) image
+compression algorithms and with general data compression
+software as well. To provide a comparison in term of
+size the test images were compressed with the two most
+well-known image compression methods (PNG and JPEG)
+and two general data compression solutions (rar and bzip2).
+
+The compression level of PNG was set to the highest
+value and JPEG is tuned to worst quality (smallest file
+size) setting. Storing of extra data (i.e. EXIF, colorspace
+information) was turned off for both formats. Rar was used with
+\texttt{-m5 -md4096} settings, and the \texttt{-9} switch
+was used with bzip2. Both settings means the best possible
+compression. The proposed approximation algorithm was
+used with $k_{max}=20$ and $k_{max}=50$. The results are
+summarized in Table \ref{compression}.
+
+\begin{table}[htbp]
+\caption{The resulting data amounts with image and
+general data compression algorithms and with the proposed
+method.}
+\begin{center}
+%\begin{booktabs}{colspec={ccccccc},row{even}={blue9}}
+\begin{booktabs}{colspec={ccc}}
+\toprule
+\SetCell[r=2]{c,1.5cm}{Compression \\ method} &
+\multicolumn{2}{c}{Size (bytes)} \\
+                    & Sherlock & cat  \\
+\midrule
+JPEG                &  2443    & 2521 \\
+PNG                 &  2688    & 2247 \\
+rar                 &  2059    & 1553 \\
+bzip2               &  1859    & 1690 \\
+GA ($k_{max}=20$)   &  139     & 139  \\
+GA ($k_{max}=50$)   &  345     & 345  \\
+\bottomrule
+\end{booktabs}
+\label{compression}
 \end{center}
 \end{table}
 
@@ -370,6 +420,9 @@ under 10 miutes.
 	In: Advances in Artificial Intelligence. CAEPIA 2015. Lecture Notes in Computer Science, vol 9422. Springer, Cham. doi: 10.1007/978-3-319-24598-0\_24
 
 \bibitem{ga-transport}C. Lin, J. Yu, J. Liu and C. Lee, ``Genetic Algorithm for Shortest Driving Time in Intelligent Transportation Systems``, 2008 International Conference on Multimedia and Ubiquitous Engineering, 2008, pp. 402-406, doi: 10.1109/MUE.2008.16.
+
+\vfill\eject
+
 
 \bibitem{ga-vrp}Zhu, K. Q., ``A new genetic algorithm for VRPTW``, Proceedings of the international conference on artificial intelligence. 2000.
 
