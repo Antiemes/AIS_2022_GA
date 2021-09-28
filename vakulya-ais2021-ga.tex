@@ -204,7 +204,28 @@ newly generated specimen (by crossover).
 
 \subsection{Program flow}
 
+The flow of the program goes through the following steps.
 
+Step 1. Loading the reference image.
+
+Step 2. Generating the initial population, where each specimen
+consist of one randomly generated triangle.
+
+Step 3. Applying \emph{mutation} operators for each specimen
+with predefined probabilities.
+
+Step 4. Calculating the \emph{error} for each specimen.
+
+Step 5. Writing out statistical information.
+
+Step 6. Applying the \emph{selection} operator, i.e.
+eliminating the specimen with the hightest error.
+
+Step 7. Generating new specimen with \emph{crossover}
+in place of the eliminated ones.
+
+Step 8. Repeatin the procedure from Step 3 until achieving
+the desired number of generations.
 
 \subsection{Software architecture}
 
@@ -416,13 +437,12 @@ under 10 miutes.
 \bibitem{ga-book}Sivanandam, S. N. and Deepa, S. N., ``Introduction to Genetic Algorithms'',
 	Springer-Verlag Berlin Heidelberg, 2008, ISBN 978-3-540-73189-4
 
+\vfill\eject
+
 \bibitem{mar-io}Baldominos A., Saez Y., Recio G., Calle J. ``Learning Levels of Mario AI Using Genetic Algorithms``,
 	In: Advances in Artificial Intelligence. CAEPIA 2015. Lecture Notes in Computer Science, vol 9422. Springer, Cham. doi: 10.1007/978-3-319-24598-0\_24
 
 \bibitem{ga-transport}C. Lin, J. Yu, J. Liu and C. Lee, ``Genetic Algorithm for Shortest Driving Time in Intelligent Transportation Systems``, 2008 International Conference on Multimedia and Ubiquitous Engineering, 2008, pp. 402-406, doi: 10.1109/MUE.2008.16.
-
-\vfill\eject
-
 
 \bibitem{ga-vrp}Zhu, K. Q., ``A new genetic algorithm for VRPTW``, Proceedings of the international conference on artificial intelligence. 2000.
 
