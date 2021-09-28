@@ -55,9 +55,11 @@ a monochromatic image; the position of the triangles are
 optimized with GA. The chromosome representation, the
 mutation nad crossover operators and different selection
 strategies are evaluated. The algorithm is capable to give
-recognizable approximation of images in the 100 byte range.
+recognizable approximation of images in the 100 byte range,
+which means an extreme compression in exchange for the
+lower quality output.
 
-\section{Previous work}
+\section{Related work}
 
 Genetic algorithms are suitable to problems, where
 there no efficient solution is available to calculate
@@ -69,6 +71,11 @@ best solution.
 Scheduling is an everyday problem in industy \cite{ga-scheduling}
 and transportation planning \cite{ga-transport}, where genetic
 algorithms can offer a good alternative to e.g. linear programming.
+
+A similar area covers the Vehicle Routing Problems (VRP).
+A practical genetic algorithm based solution can be found in \cite{ga-vrp}.
+It is closely related to the traveling salesman problem, which
+can also be approximated with GA \cite{ga-tsp}.
 
 A good application of genetic algorithm is calculating
 the synaptic weights of neural networks. MarIO \cite{mar-io}
@@ -84,7 +91,13 @@ In economics portfolio optimization \cite{ga-portfolio}
 and automatic trading \cite{ga-trading}
 can be implemented with genetic algorithms.
 
-\cite{image-proc}
+In the area of image processing GA can be
+efficiently used in combination with neural networks for e.g.
+image segmentation \cite{ga-imgseg} or image enhancement \cite{ga-imgenh}.
+Image compression tends to use fast algorithms to give an
+indentical (lossless compression) or an indistinguishable
+(lossy compression) representation of the input image,
+in singnificantly less space \cite{image-proc}.
 
 \section{The GA-based image compression}
 
@@ -291,11 +304,62 @@ with 20 triangles takes 139 bytes of data.
 	\label{curve-cat}
 \end{figure}
 
+\begin{table}[htbp]
+\caption{The error after 1000 generations with different $k_{max}$ values}
+\begin{center}
+%\begin{booktabs}{colspec={ccccccc},row{even}={blue9}}
+\begin{booktabs}{colspec={ccc}}
+\toprule
+{Image name} &
+	{$k_{max}$} &
+	Final error (\%) \\
+\midrule
+\SetCell[r=10]{c,1.5cm}{Sherlock} &   5 & 6.338 \\
+                                  &  10 & 4.218 \\
+                                  &  15 & 2.401 \\
+                                  &  20 & 1.439 \\
+                                  &  25 & 1.220 \\
+                                  &  30 & 1.301 \\
+                                  &  40 & 1.123 \\
+                                  &  50 & 1.006 \\
+                                  &  60 & 0.940 \\
+                                  &  70 & 0.898 \\
+\specialrule{2.5pt,gray5}{1pt}{1pt}
+\SetCell[r=10]{c,1.5cm}{Cat}      &   5 & 3.775 \\
+                                  &  10 & 2.260 \\
+                                  &  15 & 1.320 \\
+                                  &  20 & 1.199 \\
+                                  &  25 & 0.837 \\
+                                  &  30 & 0.807 \\
+                                  &  40 & 0.532 \\
+                                  &  50 & 0.612 \\
+                                  &  60 & 0.569 \\
+                                  &  70 & 0.562 \\
+\bottomrule
+\end{booktabs}
+\label{tab1}
+\end{center}
+\end{table}
 
 \section{Summary}
 
 A genetic algorithm based image approximation method
-was proposed.
+was proposed. The algorithm can approximate black and
+white images with a limited (definable) number of
+bkack and white triangles. The GA is implemented
+with 3 mutation and a crossover operator. Selection
+operator uses an elitist approach. Formal definition
+was given to the fitness function computation.
+
+The proposed algorithm was implemented as a C
+language program and tested with different input
+images and with several maximal number number
+of triangles.
+
+The algorithm can generate a recognizable quality
+approximation of an image with moderate complexity
+in less than 150 bytes with computation times
+under 10 miutes.
 
 \begin{thebibliography}{00}
 
@@ -306,6 +370,10 @@ was proposed.
 	In: Advances in Artificial Intelligence. CAEPIA 2015. Lecture Notes in Computer Science, vol 9422. Springer, Cham. doi: 10.1007/978-3-319-24598-0\_24
 
 \bibitem{ga-transport}C. Lin, J. Yu, J. Liu and C. Lee, ``Genetic Algorithm for Shortest Driving Time in Intelligent Transportation Systems``, 2008 International Conference on Multimedia and Ubiquitous Engineering, 2008, pp. 402-406, doi: 10.1109/MUE.2008.16.
+
+\bibitem{ga-vrp}Zhu, K. Q., ``A new genetic algorithm for VRPTW``, Proceedings of the international conference on artificial intelligence. 2000.
+
+\bibitem{ga-tsp}Ahmed, Z. H. ``Genetic algorithm for the traveling salesman problem using sequential constructive crossover operator``, International Journal of Biometrics \& Bioinformatics (IJBB) 3.6 (2010): 96.
 
 \bibitem{ga-scheduling}Lim, C., and Eoksu S., ``Production planning in manufacturing/remanufacturing environment using genetic algorithm``, Proceedings of the 7th annual conference on Genetic and evolutionary computation. 2005.
 
@@ -321,8 +389,11 @@ Pages 21-45,
 ISSN 0165-0114,
 10.1016/S0165-0114(98)00399-6.
 
+\bibitem{ga-imgseg}Pare, S., Bhandari, A. K., Kumar, A., Singh, G. K., Khare, S. ``Satellite image segmentation based on different objective functions using genetic algorithm: a comparative study.`` In 2015 IEEE international conference on digital signal processing (DSP) (pp. 730-734). IEEE.
+
 \bibitem{image-proc}Jayaraman, S., S. Esakkirajan, and T. Veerakumar. ``Digital image processing``, Mc Graw Hill India, 2009, ISBN 978-0070144798
 
+\bibitem{ga-imgenh}Deborah, H., Arymurthy, A. M., ``Image enhancement and image restoration for old document image using genetic algorithm``, In 2010 Second International Conference on Advances in Computing, Control, and Telecommunication Technologies (pp. 108-112). IEEE.
 
 \end{thebibliography}
 
