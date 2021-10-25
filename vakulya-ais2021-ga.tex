@@ -91,7 +91,7 @@ is an AI player to the Super Mario game.
 Genetic algorithms are also suitable to generate program code
 (genetic programming) to determine the behavior of e.g.
 autonomous robots. A good example is \cite{ga-robocode},
-where a specialla tailored programming language (Robocode)
+where a specially tailored programming language (Robocode)
 is used to program virtual battle robots.
 
 In economics portfolio optimization \cite{ga-portfolio}
@@ -104,7 +104,7 @@ image segmentation \cite{ga-imgseg} or image enhancement \cite{ga-imgenh}.
 Image compression tends to use fast algorithms to give an
 indentical (lossless compression) or an indistinguishable
 (lossy compression) representation of the input image,
-in singnificantly less space \cite{image-proc}.
+in significantly less space \cite{image-proc}.
 
 \section{The GA-based image compression}
 
@@ -117,7 +117,7 @@ either black or white:
 	IMG = (a_{ij}) \in {0,1}^{n \times n}
 \end{equation}
 
-An approximation is given as a set of $n$ triangles. The corner points of
+An approximation is given as a set of $n$ triangles. The vertices of
 the triangles are placed in the target image, in integer positions,
 and can have either black or white color. The $k^\text{th}$ triangle
 $t_k$ can be given as a quad:
@@ -127,7 +127,7 @@ $t_k$ can be given as a quad:
 \end{equation}
 
 Time $I(t_k)$ image of triangle $t_k$ is a set of points, which are geometrically
-between the corners:
+between the vertices:
 
 \begin{equation}
 	\begin{split}
@@ -192,7 +192,7 @@ built into the program.
 
 	\item{\emph{M2} adds a triangle with random coordinates}
 
-	\item{\emph{M3} modifies the position of 1, 2 or 3 corneres of a triangle}
+	\item{\emph{M3} modifies the position of 1, 2 or 3 vertices of a triangle}
 
 \end{itemize}
 
@@ -220,12 +220,12 @@ Step 4. Calculating the \emph{error} for each specimen.
 Step 5. Writing out statistical information.
 
 Step 6. Applying the \emph{selection} operator, i.e.
-eliminating the specimen with the hightest error.
+eliminating the specimen with the highest error.
 
 Step 7. Generating new specimen with \emph{crossover}
 in place of the eliminated ones.
 
-Step 8. Repeatin the procedure from Step 3 until achieving
+Step 8. Repeating the procedure from Step 3 until achieving
 the desired number of generations.
 
 \subsection{Software architecture}
