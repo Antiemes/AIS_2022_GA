@@ -1,9 +1,9 @@
 TEX = pdflatex -interaction nonstopmode
 BIB = bibtex
-DOCKERIMAGE = hegyhati/journal-latex:latest
+DOCKERIMAGE = antiemes/latex:latest
 
 
-MAINDOCUMENT = vakulya-ais2021-ga
+MAINDOCUMENT = vakulya-ais2022-ga
 BIBFILE = references.bib
 FIGURES = $(shell find *.eps *.png *.jpg)
 
