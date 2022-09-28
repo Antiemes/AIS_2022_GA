@@ -14,7 +14,7 @@
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \begin{document}
 
-\title{Evaluation of a genetic algorithm based image approximation method}
+\title{Genetic algorithm based image approximation with geometrical shapes}
 
 \author{\IEEEauthorblockN{Gergely Vakulya}
 \IEEEauthorblockA{\small \textit{Alba Regia Technical Faculty} \\
@@ -43,30 +43,60 @@ genetic algorithm, image approximation
 
 \section{Introduction}
 
-The image approximation algorithm presented in TODO used arbitrary triangles to
-fill areas of the image. Using different shapes, however, can lead to different
-results. In this paper rectangles and circles will be used for the approximation.
+The genetic algorithm \cite{ga-book} concept can be efficiently used in many
+optimization problems to provide an alternative solution. It can be used is
+several areas from data mining \cite{barman2017} to neural networks and deep learning \cite{such2017}.
+GA does not guarantee the optimum, and the quality
+of the approximation highly depends on the implementation and on the carefully
+chosen design parameters.
 
-The required amount of data to represent the size and the position of the shapes
-is different in each case. In case of triangles the coordinates of the three
-vertices are required to store, which means a total of 6 numerical parameters.
-A circle can be defined with the center point and the radius, summing up to 3 parameters.
-Rectangles can be given with the two opposite vertices, and an optional value
-for the rotation, resulting in 4 or 5 parameteres. Finally, the shapes can be mixed,
-as well.
+One large area, where GA can efficiently be used, is image processing \cite{ga-imgseg},
+e.g. image approximation.
 
-The following design parameters and settings will be evaluated.
+In \cite{vakulya2021} an image approximation algorithm was presented using
+arbitrary triangles to approximate the back and white areas of images.
+Using different shapes, however, can lead to different
+results. In this paper additional shapes (rectangles and circles) will be used
+for the approximation, among the triangles.
 
-\begin{itemize}
-
-  \item{Fitness vs the number of generations using different shapes}
-
-  \item{Fitness vs. }
-
-\end{itemize}
+The efficiency of the algorithm is highly affected by the design parameters. In
+this paper the effect of the used shapes, the maximum number of shapes, the
+mutation and crossover ratio and the distribution and the parameters of the
+random numbers used in generation of the new shapes and during the mutations
+are evaluated.
 
 \section{Related work}
 
+Genetic algorithms \cite{ga-book} are widely used \cite{such2017}, primarily for solving problems, where
+the number of parameters is  too high and no quick solution is known. For
+most of those problems finding the optimal solution is not critical, and
+an approximation (or maybe any possible solution) can be acceptable.
+
+An approximate solution can be given to classic NP-complete problems,
+Vehicle Routing Problem (VRP) \cite{ga-vrp} and Travelling Salesman Problem (TSP) \cite{ga-tsp},
+with genetic algorithms. Another two typical applications are transporting \cite{ga-transport}
+and scheduling \cite{ga-scheduling}.
+
+In mechanical engineering genetic algorithms can be used to optimize mechanical
+components, e.g. to make support elements with minimum weight (and from
+minimum amount of material) and with maximal strength \cite{bhoskar2015}.
+
+Different areas, like fuzzy logic \cite{buckley1994}, data mining \cite{barman2017} or
+scheduling \cite{gonccalves2005} can efficiently combined with genetic algorithms.
+
+Genetic algorithms can be effectively used for economic applications \cite{dawid1998},
+e.g. for automatized trading \cite{ga-trading} or portfolio analysis \cite{ga-portfolio}.
+
+A promising application is using genetic algorithm to optimize the
+weights of a neural network instead of using back propagation \cite{hecht1992, such2017}.
+Two interesting applications of neuro-evolution are an automated player
+for the classic Nintendo Super Mario Brothers video game (MarIO) \cite{mar-io}
+and an application, where a virtual robot battle player is controlled by a
+neuro-evolutionary algorithm \cite{ga-robocode}.
+
+A good application of genetic algorithms is image processing \cite{image-proc}, e.g.
+image segmentation \cite{ga-imgseg} or image enhancement \cite{ga-imgenh}. This paper
+will focus on a similar application: image approximation \cite{vakulya2021}.
 
 \section{The GA-based image compression}
 
@@ -75,6 +105,12 @@ The following design parameters and settings will be evaluated.
 
 \subsection{Chromosome representation}
 
+The required amount of data to represent the size and the position of the shapes
+is different in each case. In case of triangles the coordinates of the three
+vertices are required to store, which means a total of 6 numerical parameters.
+A circle can be defined with the center point and the radius, summing up to 3 parameters.
+Rectangles can be given with the two opposite vertices, resulting in 4 parameters.
+Finally, the shapes can be mixed, as well.
 
 \subsection{Fitness function}
 
@@ -90,7 +126,7 @@ The following design parameters and settings will be evaluated.
 
 \section{Test results}
 
-Figures \ref{sherlock-6} and \ref{cat-6} 
+Figures \ref{sherlock-6} and \ref{cat-6}
 
 \begin{figure}[htbp]
 	\centering

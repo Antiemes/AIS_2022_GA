@@ -7,8 +7,8 @@ MAINDOCUMENT = vakulya-ais2022-ga
 BIBFILE = references.bib
 FIGURES = $(shell find *.eps *.png *.jpg)
 
-#all: $(MAINDOCUMENT).tex $(MAINDOCUMENT).bbl $(FIGURES)
-all: $(MAINDOCUMENT).tex $(FIGURES)
+all: $(MAINDOCUMENT).tex $(MAINDOCUMENT).bbl $(FIGURES)
+#all: $(MAINDOCUMENT).tex $(FIGURES)
 	$(TEX) $(MAINDOCUMENT)
 	$(TEX) $(MAINDOCUMENT)
 
