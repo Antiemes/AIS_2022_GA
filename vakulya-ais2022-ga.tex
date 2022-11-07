@@ -9,6 +9,7 @@
 \usepackage{xcolor}
 %\usepackage{booktabs}
 \usepackage{tabularray}
+\usepackage{flushend}
 \UseTblrLibrary{booktabs}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
@@ -102,87 +103,271 @@ will focus on a similar application: image approximation \cite{vakulya2021}.
 
 \subsection{Problem statement}
 
+The algorithm work with 8-bit grayscale images with, and represent them as an $(n \times n)$
+matrix:
 
-\subsection{Chromosome representation}
+\begin{equation}
+  IMG=(a_{i,j} \in {0, 1, \dots 255}^{n \times n}),
+\end{equation}
 
-The required amount of data to represent the size and the position of the shapes
-is different in each case. In case of triangles the coordinates of the three
-vertices are required to store, which means a total of 6 numerical parameters.
-A circle can be defined with the center point and the radius, summing up to 3 parameters.
-Rectangles can be given with the two opposite vertices, resulting in 4 parameters.
-Finally, the shapes can be mixed, as well.
+\noindent where $a_{i,j}$ is the pixel in the $(i, j)$ coordinates of the input image.
 
-\subsection{Fitness function}
+An approximation $B$ of the image consist of the series of $k$ shapes:
 
+\begin{equation}
+  B = (s_1, s_2, \dots, s_k)
+\end{equation}
 
-\subsection{Genetic operators}
+\noindent where each shape
+is given with a series of parameters. A shape $s$ is defined as
+follows:
 
+\begin{equation}
+  s = (t, p_1, p_2, \dots, p_{pn(t)}, c),
+\end{equation}
 
-\subsection{Program flow}
+\noindent where $t$ is the type of the shape and $p_1, \dots, p_{pn(t)}$ are
+the parameters of the shape, given that $pn(t)$ gives  the number of parameters
+for the $t^{th}$ shape. The $c \in {-255, \dots, 255}$ parameter gives
+the color of the shape.
+%For the meaning of each parameter see TODO.
 
+Each approximation has a graphical representation $R$, similarly to the
+input image:
+
+\begin{equation}
+  R=(b_{i,j} \in {0, 1, \dots 255}^{n \times n}),
+\end{equation}
+
+\noindent where $b_{i,j}$ is the pixel in the $(i, j)$ coordinates of the approximation.
+%For calculation of the approximation see TODO.
+
+\subsection{Graphical representation}
+
+The genetic algorithm handles the following shapes:
+
+\begin{itemize}
+
+  \item{$t=1$ represents a triangle with $np(1)=6$ parameters, where $(p_1, p_2)$,
+    $(p_3, p_4)$ and $(p_5, p_6)$ belong the 3 vertices.}
+
+  \item{$t=2$ defines a rectangle with $np(2)=4$ and $(p_1, p_2)$ and $(p_2, p_3)$}
+    give the opposite vertices.
+
+  \item{Finally, $t=3$ determines a circle with $np(3)=3$ parameters, where
+    $(p_1, p_2)$ is the center of the circle and $p_3$ is the radius.}
+
+\end{itemize}
+
+During calculation of $R$ the shapes are rendered overlaying each other with
+adding their color to the actual image, stating from a white image. After
+adding a shape, the value of each pixel is kept between 0 and 255.
+
+The aim of the algorithm is to find an approximation $B$ with minimum error $e(B)$, i.e.
+with minimum difference between the original image $IMG$ and the graphical
+representation $R$ of the approximation $B$:
+
+\begin{equation}
+  e(B) = \left\lvert \sum_{i,j}(IMG_{i,j}-R_{i,j}) \right\rvert
+\end{equation}
+
+The conventional term related to genetic algorithms is \emph{fitness function}, which
+can be defined as the opposite of the error:
+
+\begin{equation}
+  f(B) = -e(B).
+\end{equation}
+
+\subsection{The genetic algorithm}
+
+The genetic algorithm uses a $P$ \emph{population} of $p$ approximations:
+
+\begin{equation}
+  P = {B_1, \dots, B_p}.
+\end{equation}
+
+At first each approximation of the population is initiated with an approximation
+contains a number of randomly generated shapes. Then every population is generated
+as follows.
+
+\begin{itemize}
+  \item{The graphical representation is rendered for each approximation.}
+  \item{The fitness function is calculated using the graphical representations and the original image.}
+  \item{A fixed number of approximations are selected from the population with the highest fitness, which are left intact.}
+  \item{A fixed number of approximations are overwritten by new ones generated using crossover.}
+  \item{The rest of the approximations are randomly modified in terms of the coordinates and the color with predefined probabilities.}
+\end{itemize}
+
+For sake of simplicity the details of the genetic operators are not discussed here in detail.
+They can be found in \cite{vakulya2021}.
 
 \subsection{Software architecture}
 
+The image approximation algorithm is implemented in C language with as few external
+dependencies as possible to be portable to different operating systems. The different
+parameters (i.g. population size, resolution, maximum number of shapes, shape types) can
+be set at compile time.
+
+The software excepts the input image in BMP format in grayscale with a fixed resolution.
+The graphical representation of the approximation with the smallest error is saved
+in every tenth iteration in raw format and converted to JPEG using an external program.
+
+The implementation uses a single thread only, but several instances with different settings can
+be run in parallel.
 
 \section{Test results}
 
-Figures \ref{sherlock-6} and \ref{cat-6}
+To test the performance of the method with different settings and to analyze the
+effect of different parameters the genetic algorithm was run with several different
+settings. The parameters can be summarized as follows:
+
+\begin{itemize}
+
+  \item{Maximum number of shapes: $20 \leq k_{max} \leq 100$}
+
+  \item{Population size: $p=4096$}
+
+  \item{Intact approximations: 256}
+
+  \item{Overwritten approximations: 1024}
+
+  \item{Shapes: triangles only, rectangles only, circles only and all shapes mixed.}
+
+  \item{Random shape generation and mutation with random numbers with uniform and Gaussian distribution.}
+
+\end{itemize}
+
+During generating and modifying the shapes two different strategies are used. The \emph{uniform}
+strategy uses uniform distribution for all random numbers, i.g. the vertices of the triangles
+and the rectangles, and the center and the radius of the circles are generated with uniform
+random distribution. The same is true for the modification of the vertices and the radii as well.
+
+The \emph{Gaussian} strategy uses random numbers with Gaussian distribution. During generation of
+triangles and rectangles first a center point is generated with uniform distribution and the vertices are
+shifted with Gaussian offsets. The circles are generated with uniform centers and Gaussian radii.
+
+The test image can be seen in Fig. \ref{sherlock-orig-5000}(a). It is a moderately detailed,
+well distinguishable silhouette of Sherlock Holmes. Fig. \ref{sherlock-orig-5000}(b) contains
+the best approximation during the experiments with the number of shapes limited to 80 ($k_{max}=80$).
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.35\textwidth]{fig/sherlock6.png}
-	\caption{The best matching Sherlock image after $g$ generations.}
-	\label{sherlock-6}
+	\includegraphics[width=0.35\textwidth]{fig/sherlock_g5000.png}
+  \caption{The test image (a) and the best matching image after 5000 generations with the best
+  performing settings.}
+	\label{sherlock-orig-5000}
+\end{figure}
+
+Fig. \ref{sherlock-generations} shows the best approximation of the test image after 50, 200
+and 1000 generations using mixed shapes (upper row) and circles (lower row). The maximum number
+of shapes were $k_{max}=80$.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.35\textwidth]{fig/sherlock_generations.png}
+	\caption{The best approximation of the test image after 50, 200 and 1000 generations using
+  mixed shapes (upper row) and circles only (lower row).}
+	\label{sherlock-generations}
+\end{figure}
+
+On Figs. \ref{uni-80} and \ref{gauss-nr} the effect of using different shapes and
+different random number strategies are visualized. For this experiment
+$k_{max}=80$ was set. Fig. \ref{uni-80} shows the results of the uniform strategy,
+while Fig. \ref{gauss-80} belongs to the Gaussian random number strategy.
+Gaussian distribution leads to slightly lower errors in each case. During
+the experiments triangles gave the worst performance, while the other two
+shapes and the mixed mode performed almost equally, being the mixed mode the best setting.
+
+\begin{figure}[htbp]
+	\centering
+		\resizebox{.45\textwidth}{!}{\input{uni_80.tex}}
+	\caption{}
+	\label{uni-80}
 \end{figure}
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.35\textwidth]{fig/cat6.png}
-	\caption{The best matching cat image after $g$ generations.}
-	\label{cat-6}
+		\resizebox{.45\textwidth}{!}{\input{gauss_80.tex}}
+	\caption{}
+	\label{gauss-80}
 \end{figure}
 
+To evaluate the effect of $k_{max}$ and the random distribution the same test image
+was approximated with 9 different $k_{max}$ values between 20 and 100, and the
+genetic algorithm was run with the Gaussian random number strategy and with mixed shapes.
+Fig. \ref{gauss-nr}
+shows the error of the best approximation in each generation.
 
-\begin{table}[htbp]
-\caption{The error after 1000 generations with different $k_{max}$ values}
-\begin{center}
-%\begin{booktabs}{colspec={ccccccc},row{even}={blue9}}
-\begin{booktabs}{colspec={cccc}}
-\toprule
-{Image name} &
-	{$k_{max}$} &
-	Final error (\%) &
-	Size (bytes)\\
-\midrule
-\SetCell[r=10]{c,1.5cm}{Sherlock} &   5 & 6.338 &  36\\
-                                  &  10 & 4.218 &  70\\
-                                  &  15 & 2.401 & 105\\
-                                  &  20 & 1.439 & 139\\
-                                  &  25 & 1.220 & 173\\
-                                  &  30 & 1.301 & 207\\
-                                  &  40 & 1.123 & 276\\
-                                  &  50 & 1.006 & 345\\
-                                  &  60 & 0.940 & 414\\
-                                  &  70 & 0.898 & 483\\
-\specialrule{2.5pt,gray5}{1pt}{1pt}
-\SetCell[r=10]{c,1.5cm}{Cat}      &   5 & 3.775 &  36\\
-                                  &  10 & 2.260 &  70\\
-                                  &  15 & 1.320 & 105\\
-                                  &  20 & 1.199 & 139\\
-                                  &  25 & 0.837 & 173\\
-                                  &  30 & 0.807 & 207\\
-                                  &  40 & 0.532 & 276\\
-                                  &  50 & 0.612 & 345\\
-                                  &  60 & 0.569 & 414\\
-                                  &  70 & 0.562 & 483\\
-\bottomrule
-\end{booktabs}
-\label{tab1}
-\end{center}
-\end{table}
+\begin{figure}[htbp]
+	\centering
+		\resizebox{.45\textwidth}{!}{\input{gauss_nr.tex}}
+	\caption{}
+	\label{gauss-nr}
+\end{figure}
+
+According to the tests the achievable minimum error decreases with more and
+more shapes. Using less than 40 or 50 shapes does not give a recognizable
+approximation. On the other hand, using more than 80 shapes does not
+significantly reduce the achievable error.
+
+%The required amount of data to represent the size and the position of the shapes
+%is different in each case. In case of triangles the coordinates of the three
+%vertices are required to store, which means a total of 6 numerical parameters.
+%A circle can be defined with the center point and the radius, summing up to 3 parameters.
+%Rectangles can be given with the two opposite vertices, resulting in 4 parameters.
+%The different shapes can be mixed, or can be used alone.
+%
+%
+%\begin{table}[htbp]
+%\caption{The error after 1000 generations with different $k_{max}$ values}
+%\begin{center}
+%%\begin{booktabs}{colspec={ccccccc},row{even}={blue9}}
+%\begin{booktabs}{colspec={cccc}}
+%\toprule
+%{Image name} &
+%	{$k_{max}$} &
+%	Final error (\%) &
+%	Size (bytes)\\
+%\midrule
+%\SetCell[r=10]{c,1.5cm}{Sherlock} &   5 & 6.338 &  36\\
+%                                  &  10 & 4.218 &  70\\
+%                                  &  15 & 2.401 & 105\\
+%                                  &  20 & 1.439 & 139\\
+%                                  &  25 & 1.220 & 173\\
+%                                  &  30 & 1.301 & 207\\
+%                                  &  40 & 1.123 & 276\\
+%                                  &  50 & 1.006 & 345\\
+%                                  &  60 & 0.940 & 414\\
+%                                  &  70 & 0.898 & 483\\
+%\specialrule{2.5pt,gray5}{1pt}{1pt}
+%\SetCell[r=10]{c,1.5cm}{Cat}      &   5 & 3.775 &  36\\
+%                                  &  10 & 2.260 &  70\\
+%                                  &  15 & 1.320 & 105\\
+%                                  &  20 & 1.199 & 139\\
+%                                  &  25 & 0.837 & 173\\
+%                                  &  30 & 0.807 & 207\\
+%                                  &  40 & 0.532 & 276\\
+%                                  &  50 & 0.612 & 345\\
+%                                  &  60 & 0.569 & 414\\
+%                                  &  70 & 0.562 & 483\\
+%\bottomrule
+%\end{booktabs}
+%\label{tab1}
+%\end{center}
+%\end{table}
 
 
 \section{Summary}
+
+In this paper a genetic algorithm based image approximation method was
+presented, which extends a similar, existing solution. The approximation
+is based on a genetic algorithm and uses a limited number of triangles,
+rectangles, circles, or all of them. The paper discussed several different
+design parameters of the algorithm: different limits for the number of
+shapes, different random number generation strategies and different shapes.
+In all tests the triangle based approximation was outperformed by the others,
+and the mixed strategy provided the best results. With using Gaussian distribution
+during some part of the algorithm the results can slightly be improved.
 
 \bibliographystyle{IEEEtran}
 \bibliography{IEEEabrv,references}
